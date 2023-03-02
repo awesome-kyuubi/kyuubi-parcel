@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "name": "kyuubi",
+  "version": "%SERVICEVERSION%",
+  "setActiveSymlink": true,
+  "provides": [
+    "kyuubi"
+  ],
+  "depends": "",
+  "replaces": "",
+  "conflicts": "kyuubi",
+
+  "scripts": {
+    "defines": "kyuubi_env.sh"
+  },
+"users": {
+    "kyuubi": {
+      "longname"    : "kyuubi",
+      "home"        : "/var/lib/kyuubi",
+      "shell"       : "/bin/bash",
+      "extra_groups": [ "kyuubi" ]
+    }
+  },
+
+  "groups": [
+    "kyuubi"
+  ],
+  "packages": [],
+  "components": []
+}
