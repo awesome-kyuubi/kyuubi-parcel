@@ -3,9 +3,9 @@ set -x
 set -e
 #cm_ext branch
 CM_EXT_BRANCH=cm5-5.15.0
-kyuubi_version=1.6.1
+kyuubi_version=1.7.0
 parcel_version=${kyuubi_version}-1
-kyuubi_package_url=https://archive.apache.org/dist/incubator/kyuubi/kyuubi-${kyuubi_version}-incubating/apache-kyuubi-${kyuubi_version}-incubating-bin.tgz
+kyuubi_package_url="https://dlcdn.apache.org/kyuubi/kyuubi-${kyuubi_version}/apache-kyuubi-${kyuubi_version}-bin.tgz"
 kyuubi_package_name=kyuubi-${parcel_version}
 kyuubi_parcel_name="$kyuubi_package_name-el7.parcel"
 kyuubi_service_name="KYUUBI"
@@ -27,9 +27,9 @@ fi
 function get_kyuubi_package {
 if [ ! -d "${kyuubi_package_name}" ];then
   if [ ! -f "$kyuubi_package" ]; then
-    wget $kyuubi_package_url
+    wget --no-check-certificate $kyuubi_package_url
     tar -xvf ${kyuubi_package}
-    mv apache-kyuubi-${kyuubi_version}-incubating-bin  $kyuubi_package_name
+    mv apache-kyuubi-${kyuubi_version}-bin  $kyuubi_package_name
   fi
 fi
 }
