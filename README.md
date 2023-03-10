@@ -13,12 +13,12 @@ csd:    -  build CSD
 all:    -  build Parcel and CSD
 ```
 
-The output Parcel and CSD
+The output of Parcel and CSD
 ```
 $ tree *-dist
 csd-dist
-└── KYUUBI-1.7.0.jar
+└── KYUUBI-1.7.0-p0-csd.jar
 parcel-dist
-├── KYUUBI-1.7.0.p0-el7.parcel
+├── KYUUBI-1.7.0-p0-el7.parcel
 └── manifest.json
 ```
