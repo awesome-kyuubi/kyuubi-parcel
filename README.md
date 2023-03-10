@@ -1,5 +1,17 @@
-# kyuubi-parcel and csd make script
+Tool for making Parcel and CSD of Apache Kyuubi
+===
 
-Run `build/dist --help` to learn how to use this tool.
+```
+build/dist - tool for making Parcel and CSD of Apache Kyuubi
 
-After the script is executed, the parcel file and csd file for deployment will be generated in the directory parcel/parcel_out and csd/csd_out
+Usage:
++----------------------------------------+
+| build/dist [--parcel] [--csd] [--all]  |
++----------------------------------------+
+parcel: -  build Parcel
+csd:    -  build CSD
+all:    -  build Parcel and CSD
+```
+
+- Parcel output folder: `./parcel-dist`
+- CSD output folder: `./csd-dist`

@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+SELF=$(cd $(dirname $0) && pwd)
+. "$SELF/util.sh"
+
+# Determine the current working directory
+_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+CM_EXT_BRANCH=`tr -d "[:space:]" < "${_DIR}/../cm_ext-branch.txt"`
+cm_ext_home="${_DIR}/cm_ext-${CM_EXT_BRANCH}"
+local_tarball="${cm_ext_home}.tar.gz"
+remote_tarball="https://github.com/cloudera/cm_ext/archive/refs/heads/${CM_EXT_BRANCH}.tar.gz"
+wget_opts="--no-verbose"
+
+if [ ! -d "${cm_ext_home}" ]; then
+  echo "exec: wget ${wget_opts} ${remote_tarball}" 1>&2
+  wget ${wget_opts} -O "${local_tarball}" "${remote_tarball}"
+  tar -xzf "${local_tarball}" -C "${_DIR}"
+  rm -f "${local_tarball}"
+fi
+
+exec "${cm_ext_home}/make_manifest/make_manifest.py" "$@"
