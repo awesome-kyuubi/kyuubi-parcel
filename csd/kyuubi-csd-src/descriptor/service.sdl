@@ -38,7 +38,7 @@
           "start"
         ],
       "environmentVariables":{
-                    "KYUUBI_WORK_DIR":"${kyuubi.session.work.path}",
+                    "KYUUBI_WORK_DIR_ROOT":"${kyuubi_work_dir_root}",
                     "KYUUBI_LOG_DIR":"${log_dir}"
       }
     },          
