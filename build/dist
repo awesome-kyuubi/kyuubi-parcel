@@ -6,6 +6,7 @@ set -e
 SELF=$(cd $(dirname $0) && pwd)
 . "$SELF/util.sh"
 . "$SELF/find-java-home.sh"
+. "$SELF/../version.sh"
 
 function exit_with_usage {
   local exit_code=$1
@@ -61,12 +62,6 @@ PROJECT_DIR="$(cd "`dirname "$0"`/.."; pwd)"
 MVN="$PROJECT_DIR/build/mvn"
 VALIDATOR="$PROJECT_DIR/build/validator"
 MAKE_MANIFEST="$PROJECT_DIR/build/make-manifest"
-PARCEL_TAR="tar --owner=root --group=root"
-SED_I="sed -i"
-if [ "$(uname -s)" = "Darwin" ]; then
-  PARCEL_TAR="tar --uname=root --gname=root"
-  SED_I="sed -i ''"
-fi
 
 CSD_DIST_DIR=${PROJECT_DIR}/csd-dist
 PARCEL_DIST_DIR=${PROJECT_DIR}/parcel-dist
@@ -74,9 +69,13 @@ PARCEL_DIST_DIR=${PROJECT_DIR}/parcel-dist
 KYUUBI_TGZ_NAME=apache-kyuubi-${KYUUBI_VERSION}-bin.tgz
 
 SERVICE_NAME=KYUUBI
-DATE_STR=`date +%Y%m%d%H`
 SUFFIXES=el7
-VERSION=${KYUUBI_VERSION}.p${KYUUBI_PARCEL_PATCH_NO}.${DATE_STR}
+PARCEL_VERSION=${KYUUBI_VERSION}.p${KYUUBI_PARCEL_PATCH_NO}
+
+function parcel_info {
+  echo "kyuubi.parcel.user=$USER"
+  echo "kyuubi.parcel.date=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+}
 
 function build_kyuubi_parcel {
   rm -rf $PARCEL_DIST_DIR
@@ -96,10 +95,12 @@ function build_kyuubi_parcel {
   
   tar -xzf ${KYUUBI_TGZ_NAME} -C ${PARCEL_DIR}/lib/
   mv ${PARCEL_DIR}/lib/apache-kyuubi-${KYUUBI_VERSION}-bin ${PARCEL_DIR}/lib/kyuubi
-  
+  parcel_info > ${PARCEL_DIR}/lib/kyuubi/parcel-info.properties
+
   mv ${PARCEL_DIR}/lib/kyuubi/conf/kyuubi-defaults.conf.template ${PARCEL_DIR}/etc/kyuubi/conf.dist/kyuubi-defaults.conf
   mv ${PARCEL_DIR}/lib/kyuubi/conf/kyuubi-env.sh.template        ${PARCEL_DIR}/etc/kyuubi/conf.dist/kyuubi-env.sh
   mv ${PARCEL_DIR}/lib/kyuubi/conf/log4j2.xml.template           ${PARCEL_DIR}/etc/kyuubi/conf.dist/log4j2.xml
+  rm -rf ${PARCEL_DIR}/lib/kyuubi/conf
   ln -snf /etc/kyuubi/conf ${PARCEL_DIR}/lib/kyuubi/conf
 
   cp -rp ${PROJECT_DIR}/parcel/bin/*  ${PARCEL_DIR}/bin/
@@ -107,14 +108,22 @@ function build_kyuubi_parcel {
   # [KYUUBI #4494] - Fixed version: 1.7.1
   cp -rp ${PROJECT_DIR}/parcel/patch/bin/kyuubi ${PARCEL_DIR}/lib/kyuubi/bin/
 
-  $SED_I "s/%SERVICEVERSION%/$PARCEL_VERSION/g" $PARCEL_DIR_NAME/meta/parcel.json
+  if [ "$(uname -s)" = "Darwin" ]; then
+    sed -i "" "s/%SERVICEVERSION%/$PARCEL_VERSION/g" $PARCEL_DIR_NAME/meta/parcel.json
+  else
+    sed -i "s/%SERVICEVERSION%/$PARCEL_VERSION/g" $PARCEL_DIR_NAME/meta/parcel.json
+  fi
 
   $VALIDATOR -p ${PARCEL_DIR}/meta/parcel.json
   $VALIDATOR -a ${PARCEL_DIR}/meta/alternatives.json
   # $VALIDATOR -r ${PARCEL_DIR}/meta/permissions.json
   $VALIDATOR -d ${PARCEL_DIR}
 
-  $PARCEL_TAR -czf ${PARCEL_DIR_NAME}-${SUFFIXES}.parcel ${PARCEL_DIR_NAME}
+  if [ "$(uname -s)" = "Darwin" ]; then
+    tar --uname=root --gname=root -czf ${PARCEL_DIR_NAME}-${SUFFIXES}.parcel ${PARCEL_DIR_NAME}
+  else
+    tar --owner=root --group=root -czf ${PARCEL_DIR_NAME}-${SUFFIXES}.parcel ${PARCEL_DIR_NAME}
+  fi
   $VALIDATOR -f ${PARCEL_DIR_NAME}-${SUFFIXES}.parcel
 
   mv ${PARCEL_DIR_NAME}-${SUFFIXES}.parcel ${PARCEL_DIST_DIR}
@@ -134,7 +143,11 @@ function build_kyuubi_csd {
   CSD_JAR_NAME=${SERVICE_NAME}-${KYUUBI_VERSION}.jar
   rm -rf $CSD_DIR
   cp -rp ${PROJECT_DIR}/csd $CSD_DIR/
-  $SED_I "s/%CSDVERSION%/$PARCEL_VERSION/" ${CSD_DIR}/descriptor/service.sdl
+  if [ "$(uname -s)" = "Darwin" ]; then
+    sed -i "" "s/%CSDVERSION%/$PARCEL_VERSION/" ${CSD_DIR}/descriptor/service.sdl
+  else
+    sed -i "s/%CSDVERSION%/$PARCEL_VERSION/" ${CSD_DIR}/descriptor/service.sdl
+  fi
   $VALIDATOR -s ${CSD_DIR}/descriptor/service.sdl
   jar -cvf $CSD_JAR_NAME -C ${CSD_DIR} .
   mv $CSD_JAR_NAME $CSD_DIST_DIR

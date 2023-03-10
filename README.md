@@ -19,6 +19,6 @@ $ tree *-dist
 csd-dist
 └── KYUUBI-1.7.0.jar
 parcel-dist
-├── KYUUBI-1.7.0.p0.2023031105-el7.parcel
+├── KYUUBI-1.7.0.p0-el7.parcel
 └── manifest.json
 ```
