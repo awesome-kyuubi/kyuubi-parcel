@@ -1,0 +1,157 @@
+{
+  "name": "KYUUBI",
+  "label": "Kyuubi",
+  "description": "Kyuubi™ is a unified multi-tenant JDBC interface for large-scale data processing and analytics.",
+  "version": "%CSDVERSION%",
+  "compatibility": {
+    "cdhVersion": {
+      "min": "5.14.0"
+    }
+  },
+  "runAs": {
+    "user": "kyuubi",
+    "group": "kyuubi",
+    "principal": "kyuubi"
+  },
+  "inExpressWizard": true,
+  "icon": "images/icon.png",
+  "parcel": {
+    "requiredTags": [
+      "kyuubi"
+    ],
+    "optionalTags": [
+      "kyuubi-plugin"
+    ]
+  },
+  "serviceInit": {
+  },
+  "parameters": [],
+  "roles": [
+    {
+      "name": "KYUUBISERVER",
+      "label": "Kyuubiserver",
+      "pluralLabel": "Kyuubi Server",
+      "jvmBased": true,
+      "startRunner": {
+        "program": "scripts/control.sh",
+        "args": [
+          "start"
+        ],
+      "environmentVariables":{
+                    "KYUUBI_WORK_DIR_ROOT":"${kyuubi_work_dir_root}",
+                    "KYUUBI_LOG_DIR":"${log_dir}"
+      }
+    },          
+      "kerberosPrincipals": [
+        {
+          "name": "KYUUBI_PRINCIPAL",
+          "primary": "${principal}",
+          "instance": "${host}"
+        },
+        {
+          "name": "SPNEGO_PRINCIPAL",
+          "primary": "HTTP",
+          "instance": "${host}"
+        }
+      ],
+      "commands": [],
+      "topology": {
+        "minInstances": "1"
+         		
+      },
+      "logging": {
+	"dir" : "/var/log/kyuubi",
+        "filename" : "kyuubi-server-${host}.log",
+        "modifiable" : true,
+        "configName" : "conf/log4j2.properties",
+        "loggingType" : "log4j",
+        "additionalConfigs":[
+] 
+      },
+      "parameters": [
+        {
+          "name": "kyuubi.frontend.bind.port",
+          "label": "kyuubi  bind  port",
+          "configName": "kyuubi.frontend.bind.port",
+          "description": "Kyuubi jdbc connection port ",
+          "required": "true",
+          "type": "port",
+          "default": 10009
+        },
+		{
+          "name": "kyuubi.engine.share.level",
+          "label": "kyuubi.engine.share.level",
+          "configName": "kyuubi.engine.share.level",
+          "description": "Engines will be shared in different levels",
+          "required": "true",
+		  "default": "USER",
+		  "type": "string_enum",
+		  "validValues": ["CONNECTION","USER","GROUP","SERVER"]
+          
+        },
+        {
+          "name": "kyuubi_work_dir_root",
+          "label": "kyuubi_work_dir_root",
+          "configName": "kyuubi_work_dir_root",
+          "description": "Root directory for launching sql engine applications.",
+          "required": "true",
+		  "type": "path",
+		  "pathType": "localDataDir",
+          "default": "/data/kyuubi/work"
+        },
+		{
+          "name": "kyuubi.session.engine.idle.timeout",
+          "label": "kyuubi.session.engine.idle.timeout",
+          "configName": "kyuubi.session.engine.idle.timeout",
+          "description": "engine timeout, the engine will self-terminate when it's not accessed for this duration. 0 or negative means not to self-terminate.",
+          "required": "true",
+          "type": "string",
+          "default": "PT10H"
+        }
+      ],
+      "sslServer": {
+        "keyIdentifier": "kyuubiserver",
+        "enabledConfigName": "kyuubi.ssl",
+        "keystorePasswordCredentialProviderCompatible": false,
+        "keystorePasswordScriptBased": false,
+        "keystoreKeyPasswordScriptBased": false,
+        "keystoreKeyPasswordCredentialProviderCompatible": false,
+        "keyPasswordOptionality": "required"
+      },
+      "configWriter": {
+        "generators": [
+          {
+            "filename": "conf/kyuubi-defaults.conf",
+            "configFormat": "properties",
+            "includedParams": [
+	     	    "kyuubi.frontend.bind.port",
+            	"kyuubi.engine.share.level",
+            	"kyuubi.session.engine.idle.timeout"
+            ]
+          },
+		  {
+            "filename": "conf/kyuubi-env.sh",
+            "configFormat": "properties",
+            "includedParams": []
+          }
+        ]
+      }
+    }	
+  ],
+  "gateway" : {
+    "alternatives" : {
+      "name" : "conf",
+      "priority" : 51,
+      "linkRoot" : "/etc/kyuubi"
+    },
+    "configWriter" : {
+       "peerConfigGenerators" : [
+          {
+            "filename": "conf/server.properties",
+            "params": ["kyuubi.frontend.bind.port"],
+            "roleName": "KYUUBISERVER"
+          }
+        ]
+     }
+  }
+}
