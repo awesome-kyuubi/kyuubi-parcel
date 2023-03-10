@@ -1,3 +1,7 @@
+.fleet/
+.idea/
+.vscode/
+
 # Compiled class file
 *.class
 
@@ -27,6 +31,5 @@ build/*.jar
 build/apache-maven*
 build/cm_ext-*
 
-csd-dist/
-parcel-dist/
+*-dist/
 KYUUBI-*/
