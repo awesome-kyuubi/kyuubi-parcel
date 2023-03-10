@@ -1,5 +1,5 @@
 # kyuubi-parcel and csd make script
 
-This project script must be executed in the bin directory, otherwise an error will occur
+Run `build/dist --help` to learn how to use this tool.
 
 After the script is executed, the parcel file and csd file for deployment will be generated in the directory parcel/parcel_out and csd/csd_out
