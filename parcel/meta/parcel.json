@@ -6,7 +6,7 @@
   "provides": [
     "kyuubi"
   ],
-  "depends": "",
+  "depends": "ZOOKEEPER",
   "replaces": "",
   "conflicts": "KYUUBI",
   "scripts": {

@@ -27,8 +27,8 @@
   "parameters": [],
   "roles": [
     {
-      "name": "KYUUBISERVER",
-      "label": "Kyuubiserver",
+      "name": "KYUUBI_SERVER",
+      "label": "Kyuubi Server",
       "pluralLabel": "Kyuubi Server",
       "jvmBased": true,
       "startRunner": {
@@ -152,7 +152,7 @@
           "params": [
             "kyuubi.frontend.bind.port"
           ],
-          "roleName": "KYUUBISERVER"
+          "roleName": "KYUUBI_SERVER"
         }
       ]
     }
