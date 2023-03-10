@@ -70,9 +70,11 @@ KYUUBI_TGZ_NAME=apache-kyuubi-${KYUUBI_VERSION}-bin.tgz
 
 SERVICE_NAME=KYUUBI
 SUFFIXES=el7
-PARCEL_VERSION=${KYUUBI_VERSION}.p${KYUUBI_PARCEL_PATCH_NO}
 
 function parcel_info {
+  echo "kyuubi.version=$KYUUBI_VERSION"
+  echo "kyuubi.csd.version=$CSD_VERSION"
+  echo "kyuubi.parcel.version=$PARCEL_VERSION"
   echo "kyuubi.parcel.user=$USER"
   echo "kyuubi.parcel.date=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 }
@@ -138,15 +140,15 @@ function build_kyuubi_csd {
   rm -rf $CSD_DIST_DIR
   mkdir -p $CSD_DIST_DIR
 
-  CSD_DIR_NAME=${SERVICE_NAME}-${KYUUBI_VERSION}-CSD
+  CSD_DIR_NAME=${SERVICE_NAME}-${CSD_VERSION}
   CSD_DIR=${PROJECT_DIR}/${CSD_DIR_NAME}
-  CSD_JAR_NAME=${SERVICE_NAME}-${KYUUBI_VERSION}.jar
+  CSD_JAR_NAME=${SERVICE_NAME}-${CSD_VERSION}.jar
   rm -rf $CSD_DIR
   cp -rp ${PROJECT_DIR}/csd $CSD_DIR/
   if [ "$(uname -s)" = "Darwin" ]; then
-    sed -i "" "s/%CSDVERSION%/$PARCEL_VERSION/" ${CSD_DIR}/descriptor/service.sdl
+    sed -i "" "s/%CSDVERSION%/$CSD_VERSION/" ${CSD_DIR}/descriptor/service.sdl
   else
-    sed -i "s/%CSDVERSION%/$PARCEL_VERSION/" ${CSD_DIR}/descriptor/service.sdl
+    sed -i "s/%CSDVERSION%/$CSD_VERSION/" ${CSD_DIR}/descriptor/service.sdl
   fi
   $VALIDATOR -s ${CSD_DIR}/descriptor/service.sdl
   jar -cvf $CSD_JAR_NAME -C ${CSD_DIR} .

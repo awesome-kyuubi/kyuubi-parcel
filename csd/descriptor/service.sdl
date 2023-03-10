@@ -23,8 +23,7 @@
       "kyuubi-plugin"
     ]
   },
-  "serviceInit": {
-  },
+  "serviceInit": {},
   "parameters": [],
   "roles": [
     {
@@ -37,11 +36,11 @@
         "args": [
           "start"
         ],
-      "environmentVariables":{
-                    "KYUUBI_WORK_DIR_ROOT":"${kyuubi_work_dir_root}",
-                    "KYUUBI_LOG_DIR":"${log_dir}"
-      }
-    },          
+        "environmentVariables": {
+          "KYUUBI_WORK_DIR_ROOT": "${kyuubi_work_dir_root}",
+          "KYUUBI_LOG_DIR": "${log_dir}"
+        }
+      },
       "kerberosPrincipals": [
         {
           "name": "KYUUBI_PRINCIPAL",
@@ -57,16 +56,14 @@
       "commands": [],
       "topology": {
         "minInstances": "1"
-         		
       },
       "logging": {
-	"dir" : "/var/log/kyuubi",
-        "filename" : "kyuubi-server-${host}.log",
-        "modifiable" : true,
-        "configName" : "conf/log4j2.properties",
-        "loggingType" : "log4j",
-        "additionalConfigs":[
-] 
+        "dir": "/var/log/kyuubi",
+        "filename": "kyuubi-server-${host}.log",
+        "modifiable": true,
+        "configName": "conf/log4j2.properties",
+        "loggingType": "log4j",
+        "additionalConfigs": []
       },
       "parameters": [
         {
@@ -78,16 +75,20 @@
           "type": "port",
           "default": 10009
         },
-		{
+        {
           "name": "kyuubi.engine.share.level",
           "label": "kyuubi.engine.share.level",
           "configName": "kyuubi.engine.share.level",
           "description": "Engines will be shared in different levels",
           "required": "true",
-		  "default": "USER",
-		  "type": "string_enum",
-		  "validValues": ["CONNECTION","USER","GROUP","SERVER"]
-          
+          "default": "USER",
+          "type": "string_enum",
+          "validValues": [
+            "CONNECTION",
+            "USER",
+            "GROUP",
+            "SERVER"
+          ]
         },
         {
           "name": "kyuubi_work_dir_root",
@@ -95,11 +96,11 @@
           "configName": "kyuubi_work_dir_root",
           "description": "Root directory for launching sql engine applications.",
           "required": "true",
-		  "type": "path",
-		  "pathType": "localDataDir",
+          "type": "path",
+          "pathType": "localDataDir",
           "default": "/data/kyuubi/work"
         },
-		{
+        {
           "name": "kyuubi.session.engine.idle.timeout",
           "label": "kyuubi.session.engine.idle.timeout",
           "configName": "kyuubi.session.engine.idle.timeout",
@@ -124,34 +125,36 @@
             "filename": "conf/kyuubi-defaults.conf",
             "configFormat": "properties",
             "includedParams": [
-	     	    "kyuubi.frontend.bind.port",
-            	"kyuubi.engine.share.level",
-            	"kyuubi.session.engine.idle.timeout"
+              "kyuubi.frontend.bind.port",
+              "kyuubi.engine.share.level",
+              "kyuubi.session.engine.idle.timeout"
             ]
           },
-		  {
+          {
             "filename": "conf/kyuubi-env.sh",
             "configFormat": "properties",
             "includedParams": []
           }
         ]
       }
-    }	
+    }
   ],
-  "gateway" : {
-    "alternatives" : {
-      "name" : "conf",
-      "priority" : 51,
-      "linkRoot" : "/etc/kyuubi"
+  "gateway": {
+    "alternatives": {
+      "name": "conf",
+      "priority": 51,
+      "linkRoot": "/etc/kyuubi"
     },
-    "configWriter" : {
-       "peerConfigGenerators" : [
-          {
-            "filename": "conf/server.properties",
-            "params": ["kyuubi.frontend.bind.port"],
-            "roleName": "KYUUBISERVER"
-          }
-        ]
-     }
+    "configWriter": {
+      "peerConfigGenerators": [
+        {
+          "filename": "conf/server.properties",
+          "params": [
+            "kyuubi.frontend.bind.port"
+          ],
+          "roleName": "KYUUBISERVER"
+        }
+      ]
+    }
   }
 }

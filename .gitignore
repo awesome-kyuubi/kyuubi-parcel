@@ -32,4 +32,5 @@ build/apache-maven*
 build/cm_ext-*
 
 *-dist/
+*.parcel
 KYUUBI-*/
