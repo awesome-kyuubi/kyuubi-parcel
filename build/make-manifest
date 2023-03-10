@@ -2,11 +2,11 @@
 
 SELF=$(cd $(dirname $0) && pwd)
 . "$SELF/util.sh"
+. "$SELF/../version.sh"
 
 # Determine the current working directory
 _DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-CM_EXT_BRANCH=`tr -d "[:space:]" < "${_DIR}/../cm_ext-branch.txt"`
 cm_ext_home="${_DIR}/cm_ext-${CM_EXT_BRANCH}"
 local_tarball="${cm_ext_home}.tar.gz"
 remote_tarball="https://github.com/cloudera/cm_ext/archive/refs/heads/${CM_EXT_BRANCH}.tar.gz"

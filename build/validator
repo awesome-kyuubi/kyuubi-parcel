@@ -3,11 +3,10 @@
 SELF=$(cd $(dirname $0) && pwd)
 . "$SELF/util.sh"
 . "$SELF/find-java-home.sh"
+. "$SELF/../version.sh"
 
 # Determine the current working directory
 _DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-CM_EXT_BRANCH=`tr -d "[:space:]" < "${_DIR}/../cm_ext-branch.txt"`
 
 cm_ext_home="${_DIR}/cm_ext-${CM_EXT_BRANCH}"
 exec_jar="${cm_ext_home}/validator/target/validator.jar"
@@ -24,7 +23,7 @@ fi
 
 if [ ! -f "${exec_jar}" ]; then
   echo "exec: ${_DIR}/mvn clean package -DskipTests" 1>&2
-  (cd "${cm_ext_home}" && "${_DIR}"/mvn clean package -DskipTests)
+  (cd "${cm_ext_home}" && "${_DIR}"/mvn clean package -DskipTests -Dmaven.javadoc.skip -Dfindbugs.skip)
 fi
 
 exec "${JAVA_HOME}/bin/java" -jar "${exec_jar}" "$@"

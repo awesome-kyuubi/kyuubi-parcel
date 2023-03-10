@@ -20,6 +20,7 @@
 SELF=$(cd $(dirname $0) && pwd)
 . "$SELF/util.sh"
 . "$SELF/find-java-home.sh"
+. "$SELF/../version.sh"
 
 # Determine the current working directory
 _DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -104,14 +105,13 @@ function version { echo "$@" | awk -F. '{ printf("%03d%03d%03d\n", $1,$2,$3); }'
 # Determine the Maven version from the root pom.xml file and
 # install maven under the build/ folder if needed.
 install_mvn() {
-  local MVN_VERSION=`tr -d "[:space:]" < "${_DIR}/../maven-version.txt"`
   MVN_BIN="$(command -v mvn)"
   if [ "$MVN_BIN" ]; then
     local MVN_DETECTED_VERSION="$(mvn --version | head -n1 | awk '{print $3}')"
   fi
-  if [ $(version $MVN_DETECTED_VERSION) -ne $(version $MVN_VERSION) ]; then
-    local MVN_TARBALL="apache-maven-${MVN_VERSION}-bin.tar.gz"
-    local FILE_PATH="maven/maven-3/${MVN_VERSION}/binaries/${MVN_TARBALL}"
+  if [ $(version $MVN_DETECTED_VERSION) -ne $(version $MAVEN_VERSION) ]; then
+    local MVN_TARBALL="apache-maven-${MAVEN_VERSION}-bin.tar.gz"
+    local FILE_PATH="maven/maven-3/${MAVEN_VERSION}/binaries/${MVN_TARBALL}"
     local APACHE_MIRROR=${APACHE_MIRROR:-'https://www.apache.org/dyn/closer.lua'}
     local MIRROR_URL_QUERY="?action=download"
 
@@ -130,9 +130,9 @@ install_mvn() {
       "${MIRROR_URL_QUERY}" \
       "sha512" \
       "${MVN_TARBALL}" \
-      "apache-maven-${MVN_VERSION}/bin/mvn"
+      "apache-maven-${MAVEN_VERSION}/bin/mvn"
 
-    MVN_BIN="${_DIR}/apache-maven-${MVN_VERSION}/bin/mvn"
+    MVN_BIN="${_DIR}/apache-maven-${MAVEN_VERSION}/bin/mvn"
   fi
 }
 
