@@ -90,10 +90,10 @@
           
         },
         {
-          "name": "kyuubi.session.work.path",
-          "label": "kyuubi.session.work.path",
-          "configName": "kyuubi.session.work.path",
-          "description": "Engines will be shared in different levels",
+          "name": "kyuubi_work_dir_root",
+          "label": "kyuubi_work_dir_root",
+          "configName": "kyuubi_work_dir_root",
+          "description": "Root directory for launching sql engine applications.",
           "required": "true",
 		  "type": "path",
 		  "pathType": "localDataDir",
