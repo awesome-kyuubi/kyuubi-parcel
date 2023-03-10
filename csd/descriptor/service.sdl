@@ -148,7 +148,7 @@
     "configWriter": {
       "peerConfigGenerators": [
         {
-          "filename": "conf/server.properties",
+          "filename": "conf/kyuubi-defaults.conf",
           "params": [
             "kyuubi.frontend.bind.port"
           ],
