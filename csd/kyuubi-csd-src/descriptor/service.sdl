@@ -101,7 +101,7 @@
         },
 		{
           "name": "kyuubi.session.engine.idle.timeout",
-          "label": "Doris Frontend query Port",
+          "label": "kyuubi.session.engine.idle.timeout",
           "configName": "kyuubi.session.engine.idle.timeout",
           "description": "engine timeout, the engine will self-terminate when it's not accessed for this duration. 0 or negative means not to self-terminate.",
           "required": "true",
