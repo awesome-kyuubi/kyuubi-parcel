@@ -24,3 +24,4 @@ hs_err_pid*
 
 build/*.jar
 build/apache-maven*
+build/cm_ext-*
