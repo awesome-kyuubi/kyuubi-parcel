@@ -11,4 +11,7 @@
   BIN_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
   LIB_DIR=$BIN_DIR/../lib
 
+CDH_LIB_DIR=$LIB_DIR/../../CDH/lib
+. $CDH_LIB_DIR/bigtop-utils/bigtop-detect-javahome
+
 exec $LIB_DIR/kyuubi/bin/beeline "$@"
