@@ -19,21 +19,6 @@ jobs:
       - name: Make Distribution
         run: build/dist --all
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: true
-          prerelease: false
-      - name: Upload Package
-        uses: softprops/action-gh-release@v1
-        with:
-          draft: true
-          token: ${{ secrets.GITHUB_TOKEN }}
-          files: |
-            *-dist/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create ${{ github.ref }} ./*-dist/*
