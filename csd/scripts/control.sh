@@ -2,11 +2,6 @@
 set -x
 case $1 in
   (start)
-    export KYUUBI_HOME
-    export KYUUBI_CONF_DIR=$CONF_DIR/conf
-    export KYUUBI_LOG_DIR=$KYUUBI_LOG_DIR
-    export KYUUBI_PID_DIR=$CONF_DIR/pid
-    export KYUUBI_WORK_DIR_ROOT=$KYUUBI_WORK_DIR
     while read line; do
       logline=$(echo $line | grep "log.threshold=" || true)
       if [[ "$logline" != "" ]]
