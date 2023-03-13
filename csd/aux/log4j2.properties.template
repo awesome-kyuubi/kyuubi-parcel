@@ -1,0 +1,30 @@
+status=WARN
+name=KyuubiLog4j2
+
+property.log.level={{KYUUBI_LOG_LEVEL}}
+property.log.dir={{KYUUBI_LOG_DIR}}
+property.log.file={{KYUUBI_LOG_FILE}}
+property.max.log.file.size={{KYUUBI_MAX_LOG_FILE_SIZE}}
+property.max.log.file.backup.index={{KYUUBI_MAX_LOG_FILE_BACKUP_INDEX}}
+
+rootLogger.level=${log.level}
+rootLogger.appenderRef.DRFA.ref=DRFA
+rootLogger.appenderRef.Console.ref=Console
+appender.DRFA.type=RollingRandomAccessFile
+appender.DRFA.name=DRFA
+appender.DRFA.fileName=${log.dir}/${log.file}
+appender.DRFA.filePattern=${log.dir}/${log.file}.%d{yyyy-MM-dd}
+appender.DRFA.layout.type=PatternLayout
+appender.DRFA.layout.pattern=%d{DEFAULT} %-5p %c: [%t]: %m%n
+appender.DRFA.policies.type=Policies
+appender.DRFA.policies.size.type=SizeBasedTriggeringPolicy
+appender.DRFA.policies.size.size=${max.log.file.size}
+appender.DRFA.strategy.type=DefaultRolloverStrategy
+appender.DRFA.strategy.max=${max.log.file.backup.index}
+appender.Console.type=Console
+appender.Console.name=Console
+appender.Console.target=SYSTEM_ERR
+appender.Console.filter.threshold.type=ThresholdFilter
+appender.Console.filter.threshold.level=ERROR
+appender.Console.layout.type=PatternLayout
+appender.Console.layout.pattern=%d{yy/MM/dd HH:mm:ss} %-5p %c{2}: [%t]: %m%n
