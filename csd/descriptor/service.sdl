@@ -66,6 +66,15 @@
       },
       "parameters": [
         {
+          "name": "kyuubi.frontend.bind.host",
+          "label": "Kyuubi Server listening host",
+          "configName": "kyuubi.frontend.bind.host",
+          "description": "Hostname or IP of the machine on which to run Kyuubi Server",
+          "required": "true",
+          "type": "string",
+          "default": "0.0.0.0"
+        },
+        {
           "name": "kyuubi.frontend.thrift.binary.bind.port",
           "label": "Port of HiveServer2-compatible Thrift Binary protocol",
           "configName": "kyuubi.frontend.thrift.binary.bind.port",
@@ -73,6 +82,24 @@
           "required": "true",
           "type": "port",
           "default": 10009
+        },
+        {
+          "name": "kyuubi.ha.addresses",
+          "label": "kyuubi.ha.addresses",
+          "configName": "kyuubi.ha.addresses",
+          "description": "The connection string for the discovery ensemble",
+          "required": "true",
+          "type": "string",
+          "default": "zk1:2181,zk2:2181,zk3:2181"
+        },
+        {
+          "name": "kyuubi.ha.namespace",
+          "label": "kyuubi.ha.namespace",
+          "configName": "kyuubi.ha.namespace",
+          "description": "The root directory for the service to deploy its instance uri",
+          "required": "true",
+          "type": "string",
+          "default": "kyuubi"
         },
         {
           "name": "kyuubi.engine.share.level",
@@ -124,7 +151,10 @@
             "filename": "conf/kyuubi-defaults.conf",
             "configFormat": "properties",
             "includedParams": [
+              "kyuubi.frontend.bind.host",
               "kyuubi.frontend.thrift.binary.bind.port",
+              "kyuubi.ha.addresses",
+              "kyuubi.ha.namespace",
               "kyuubi.engine.share.level",
               "kyuubi.session.engine.idle.timeout"
             ]
