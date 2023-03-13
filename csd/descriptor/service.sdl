@@ -67,9 +67,9 @@
       },
       "parameters": [
         {
-          "name": "kyuubi.frontend.bind.port",
-          "label": "kyuubi  bind  port",
-          "configName": "kyuubi.frontend.bind.port",
+          "name": "kyuubi.frontend.thrift.binary.bind.port",
+          "label": "Port of HiveServer2-compatible Thrift Binary protocol",
+          "configName": "kyuubi.frontend.thrift.binary.bind.port",
           "description": "Kyuubi jdbc connection port ",
           "required": "true",
           "type": "port",
@@ -104,10 +104,10 @@
           "name": "kyuubi.session.engine.idle.timeout",
           "label": "kyuubi.session.engine.idle.timeout",
           "configName": "kyuubi.session.engine.idle.timeout",
-          "description": "engine timeout, the engine will self-terminate when it's not accessed for this duration. 0 or negative means not to self-terminate.",
+          "description": "Shared engine will self-terminate when it's not accessed for this duration. 0 or negative means not to self-terminate. The CONNECTION share level engine igores this and always terminate immediately.",
           "required": "true",
           "type": "string",
-          "default": "PT10H"
+          "default": "PT30M"
         }
       ],
       "sslServer": {
@@ -125,7 +125,7 @@
             "filename": "conf/kyuubi-defaults.conf",
             "configFormat": "properties",
             "includedParams": [
-              "kyuubi.frontend.bind.port",
+              "kyuubi.frontend.thrift.binary.bind.port",
               "kyuubi.engine.share.level",
               "kyuubi.session.engine.idle.timeout"
             ]
@@ -150,7 +150,7 @@
         {
           "filename": "conf/kyuubi-defaults.conf",
           "params": [
-            "kyuubi.frontend.bind.port"
+            "kyuubi.frontend.thrift.binary.bind.port"
           ],
           "roleName": "KYUUBI_SERVER"
         }
