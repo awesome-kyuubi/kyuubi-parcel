@@ -59,12 +59,15 @@ if [ "$MAKE_PARCEL" = "false" -a "$MAKE_CSD" = "false" ]; then
 fi
 
 PROJECT_DIR="$(cd "`dirname "$0"`/.."; pwd)"
+CSD_DIST_DIR=${PROJECT_DIR}/csd-dist
+PARCEL_DIST_DIR=${PROJECT_DIR}/parcel-dist
+
+echo "Set current dir: $PROJECT_DIR"
+cd "$PROJECT_DIR"
+
 MVN="$PROJECT_DIR/build/mvn"
 VALIDATOR="$PROJECT_DIR/build/validator"
 MAKE_MANIFEST="$PROJECT_DIR/build/make-manifest"
-
-CSD_DIST_DIR=${PROJECT_DIR}/csd-dist
-PARCEL_DIST_DIR=${PROJECT_DIR}/parcel-dist
 
 KYUUBI_TGZ_NAME=apache-kyuubi-${KYUUBI_VERSION}-bin.tgz
 
