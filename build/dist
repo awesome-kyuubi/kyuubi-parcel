@@ -110,8 +110,6 @@ function build_kyuubi_parcel {
 
   cp -rp ${PROJECT_DIR}/parcel/bin/*  ${PARCEL_DIR}/bin/
   cp -rp ${PROJECT_DIR}/parcel/meta/* ${PARCEL_DIR}/meta/
-  # [KYUUBI #4494] - Fixed version: 1.7.1
-  cp -rp ${PROJECT_DIR}/parcel/patch/bin/kyuubi ${PARCEL_DIR}/lib/kyuubi/bin/
 
   if [ "$(uname -s)" = "Darwin" ]; then
     sed -i "" "s/%SERVICEVERSION%/$PARCEL_VERSION/g" $PARCEL_DIR_NAME/meta/parcel.json
