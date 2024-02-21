@@ -17,8 +17,8 @@ The output of Parcel and CSD
 ```
 $ tree *-dist
 csd-dist
-└── KYUUBI-1.7.3-p0-csd.jar
+└── KYUUBI-1.8.1-p0-csd.jar
 parcel-dist
-├── KYUUBI-1.7.3-p0-el7.parcel
+├── KYUUBI-1.8.1-p0-el7.parcel
 └── manifest.json
 ```
